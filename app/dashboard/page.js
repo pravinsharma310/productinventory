@@ -3,9 +3,12 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import ProductManagement from "./ProductManagement";
 import SupplierPage from "./SupplierView";
+import CashierPage from "./CashierView";
+import Header from "./Header";
 
 export default function DashboardPage() {
   const [user, setUser] = useState(null);
+  const [title,setTitle] = useState("");
   const router = useRouter();
 
   useEffect(() => {
@@ -13,6 +16,13 @@ export default function DashboardPage() {
     console.log(storedUser,"storedUser")
     if (!storedUser) router.push("/login");
     setUser(storedUser);
+    if(storedUser?.type === "admin"){
+      setTitle("Admin Management")
+    }else if(storedUser?.type === "supplier"){
+      setTitle("Supplier Management")
+    } else if(storedUser?.type === "cashier"){
+      setTitle("Cashier Management")
+    }
   }, []);
 
   const handleLogout = () => {
@@ -24,12 +34,10 @@ export default function DashboardPage() {
   console.log(user,"useruseruser")
   return (
     <div>
-      {/* <h1>Welcome, {user.firstName} ({user.role})</h1>
-      <p>Email: {user.email}</p>
-      <p>Phone: {user.phone}</p>
-      <button onClick={handleLogout}>Logout</button> */}
+      {user && <Header title={title} user={user} onLogout={handleLogout} />}
       {user?.type === "admin" && <ProductManagement />}
-      {user?.type === "supplier" && <SupplierPage/>}
+      {user?.type === "supplier" && <SupplierPage/>} 
+      {user?.type === "cashier" && <CashierPage/>} 
     </div>
   );
 }

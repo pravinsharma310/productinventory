@@ -51,6 +51,7 @@ export default function RegisterForm() {
           <option value="supplier">Supplier</option>      
       </Select>
       <Button type="submit">Register</Button>
+      <Button type="submit" onClick={()=>router.push("/login")}>Login</Button>
     </Form>
   );
 }

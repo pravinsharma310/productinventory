@@ -29,12 +29,16 @@ export default function LoginForm() {
   };
 
   return (
-    <Form onSubmit={handleLogin}>
-      <h2>Login</h2>
-      {error && <ErrorText>{error}</ErrorText>}
-      <Input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-      <Input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-      <Button type="submit">Login</Button>
+    <>
+    <Form>
+        <h2>Login</h2>
+        {error && <ErrorText>{error}</ErrorText>}
+        <Input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+        <Input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+        <Button onClick={handleLogin} type="button" >Login</Button>
+        <Button type="button" onClick={()=>router.push("/register")}>Register</Button>
     </Form>
+    </>
+    
   );
 }

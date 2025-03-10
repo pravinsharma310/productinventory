@@ -20,14 +20,14 @@ export async function POST(req) {
   try {
     await connectDB();
 
-    const { name, image, stock } = await req.json();
+    const { name, image, stock, price } = await req.json();
 
-    if (!name || !image || typeof stock !== "number") {
+    if (!name || typeof stock !== "number" || typeof price !== "number") {
       return NextResponse.json({ message: "All fields are required" }, { status: 400 });
     }
 
-    const newProduct = await Product.create({ name, image, stock });
-
+    const newProduct = await Product.create({ name, image, stock, price });
+    console.log(newProduct,"newProductnewProduct")
     return NextResponse.json({
       success: true,
       message: "Product added successfully",
@@ -57,15 +57,15 @@ export async function PUT(req) {
   try {
     await connectDB();
 
-    const { id, name, image, stock } = await req.json();
+    const { _id:id, name, image, stock, price } = await req.json();
 
-    if (!id || !name || !image || typeof stock !== "number") {
+    if (!id || !name || typeof stock !== "number" || typeof price !== "number") {
       return NextResponse.json({ message: "All fields are required" }, { status: 400 });
     }
 
     const updatedProduct = await Product.findByIdAndUpdate(
       id,
-      { name, image, stock },
+      { name, image, stock, price },
       { new: true }
     );
 
