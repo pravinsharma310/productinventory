@@ -1,6 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import ProductManagement from "./ProductManagement";
+import SupplierPage from "./SupplierView";
 
 export default function DashboardPage() {
   const [user, setUser] = useState(null);
@@ -8,8 +10,9 @@ export default function DashboardPage() {
 
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
+    console.log(storedUser,"storedUser")
     if (!storedUser) router.push("/login");
-    setUser(storedUser.user);
+    setUser(storedUser);
   }, []);
 
   const handleLogout = () => {
@@ -17,14 +20,16 @@ export default function DashboardPage() {
     router.push("/login");
   };
 
-  if (!user) return <p>Loading...</p>;
+  // if (!user) return <p>Loading...</p>;
   console.log(user,"useruseruser")
   return (
     <div>
-      <h1>Welcome, {user.firstName} ({user.role})</h1>
+      {/* <h1>Welcome, {user.firstName} ({user.role})</h1>
       <p>Email: {user.email}</p>
       <p>Phone: {user.phone}</p>
-      <button onClick={handleLogout}>Logout</button>
+      <button onClick={handleLogout}>Logout</button> */}
+      {user?.type === "admin" && <ProductManagement />}
+      {user?.type === "supplier" && <SupplierPage/>}
     </div>
   );
 }

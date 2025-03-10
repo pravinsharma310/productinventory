@@ -21,7 +21,7 @@ export default function LoginForm() {
 
     const data = await res.json();
     if (res.ok) {
-      localStorage.setItem("user", JSON.stringify(data.user));
+      localStorage.setItem("user", JSON.stringify(data.user.user));
       router.push("/dashboard");
     } else {
       setError(data.message);

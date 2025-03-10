@@ -20,7 +20,7 @@ export async function POST(req) {
     }
 
     const newUser = await User.create({ firstName, email, password, phone, type });
-
+    console.log(newUser,"newUser")
     return NextResponse.json({ success: true, message: "User registered successfully", user: newUser }, { status: 201 });
   } catch (error) {
     console.error("Error in registration:", error);

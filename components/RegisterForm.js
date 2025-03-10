@@ -21,7 +21,6 @@ export default function RegisterForm() {
   const handleRegister = async (e) => {
     e.preventDefault();
     setError("");
-
     const res = await fetch("/api/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
