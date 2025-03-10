@@ -45,7 +45,7 @@ export default function RegisterForm() {
       <Input type="text" name="phone" placeholder="Phone Number" value={formData.phone} onChange={handleChange} required />
       <Input type="password" name="password" placeholder="Password" value={formData.password} onChange={handleChange} required />
       <Select name="type" value={formData.type} onChange={handleChange}>
-          <option value="superadmin">Super Admin</option>
+          {/* <option value="superadmin">Super Admin</option> */}
           <option value="admin">Admin</option>
           <option value="cashier">Cashier</option>
           <option value="supplier">Supplier</option>      
