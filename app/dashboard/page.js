@@ -8,20 +8,19 @@ import Header from "./Header";
 
 export default function DashboardPage() {
   const [user, setUser] = useState(null);
-  const [title,setTitle] = useState("");
+  const [title, setTitle] = useState("");
   const router = useRouter();
 
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
-    console.log(storedUser,"storedUser")
     if (!storedUser) router.push("/login");
     setUser(storedUser);
-    if(storedUser?.type === "admin"){
-      setTitle("Admin Management")
-    }else if(storedUser?.type === "supplier"){
-      setTitle("Supplier Management")
-    } else if(storedUser?.type === "cashier"){
-      setTitle("Cashier Management")
+    if (storedUser?.type === "admin") {
+      setTitle("Admin Management");
+    } else if (storedUser?.type === "supplier") {
+      setTitle("Supplier Management");
+    } else if (storedUser?.type === "cashier") {
+      setTitle("Cashier Management");
     }
   }, []);
 
@@ -30,14 +29,21 @@ export default function DashboardPage() {
     router.push("/login");
   };
 
-  // if (!user) return <p>Loading...</p>;
-  console.log(user,"useruseruser")
   return (
-    <div>
-      {user && <Header title={title} user={user} onLogout={handleLogout} />}
-      {(user?.type === "admin" || user?.type === "user") && <ProductManagement />}
-      {user?.type === "supplier" && <SupplierPage/>} 
-      {user?.type === "cashier" && <CashierPage/>} 
+    <div className="relative w-full h-screen">
+      {/* Local Background Image */}
+      <div
+        className="absolute inset-0 bg-cover bg-center opacity-30"
+        style={{ backgroundImage: "url('/images/bgimage.webp')" }}
+      ></div>
+
+      {/* Main Content */}
+      <div className="relative z-10">
+        {user && <Header title={title} user={user} onLogout={handleLogout} />}
+        {(user?.type === "admin" || user?.type === "user") && <ProductManagement />}
+        {user?.type === "supplier" && <SupplierPage />}
+        {user?.type === "cashier" && <CashierPage />}
+      </div>
     </div>
   );
 }
