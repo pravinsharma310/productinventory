@@ -35,7 +35,7 @@ export default function DashboardPage() {
   return (
     <div>
       {user && <Header title={title} user={user} onLogout={handleLogout} />}
-      {user?.type === "admin" && <ProductManagement />}
+      {(user?.type === "admin" || user?.type === "user") && <ProductManagement />}
       {user?.type === "supplier" && <SupplierPage/>} 
       {user?.type === "cashier" && <CashierPage/>} 
     </div>
