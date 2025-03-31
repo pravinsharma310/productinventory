@@ -1,7 +1,9 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Form, Input, Select, Button, ErrorText } from "@/styles/authStyles";
+import Image from "next/image";
+
+const REGISTER = "/images/regmar.jpg";
 
 export default function RegisterForm() {
   const [formData, setFormData] = useState({
@@ -9,7 +11,7 @@ export default function RegisterForm() {
     email: "",
     phone: "",
     password: "",
-    type: "user",
+    type: "admin",
   });
   const [error, setError] = useState("");
   const router = useRouter();
@@ -21,6 +23,7 @@ export default function RegisterForm() {
   const handleRegister = async (e) => {
     e.preventDefault();
     setError("");
+
     const res = await fetch("/api/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -37,21 +40,94 @@ export default function RegisterForm() {
   };
 
   return (
-    <Form onSubmit={handleRegister}>
-      <h2>Register</h2>
-      {error && <ErrorText>{error}</ErrorText>}
-      <Input type="text" name="name" placeholder="Full Name" value={formData.name} onChange={handleChange} required />
-      <Input type="email" name="email" placeholder="Email" value={formData.email} onChange={handleChange} required />
-      <Input type="text" name="phone" placeholder="Phone Number" value={formData.phone} onChange={handleChange} required />
-      <Input type="password" name="password" placeholder="Password" value={formData.password} onChange={handleChange} required />
-      <Select name="type" value={formData.type} onChange={handleChange}>
-          {/* <option value="superadmin">Super Admin</option> */}
-          <option value="admin">Admin</option>
-          <option value="cashier">Cashier</option>
-          <option value="supplier">Supplier</option>      
-      </Select>
-      <Button type="submit">Register</Button>
-      <Button type="submit" onClick={()=>router.push("/login")}>Login</Button>
-    </Form>
+    <div className="flex min-h-screen items-center justify-center bg-white">
+      <div className="w-full max-w-md bg-white shadow-2xl rounded-2xl p-8">
+        {/* Image Section */}
+        <div className="flex justify-center mb-6">
+          <Image
+            src={REGISTER}
+            alt="Register Illustration"
+            width={320}
+            height={180}
+            className="rounded-lg shadow-md"
+          />
+        </div>
+
+        {/* Heading */}
+        <h2 className="text-3xl font-bold text-center text-blue-700 mb-6">Create an Account</h2>
+
+        {/* Error Message */}
+        {error && <p className="text-red-500 text-sm text-center mb-4">{error}</p>}
+
+        {/* Form Section */}
+        <form onSubmit={handleRegister} className="space-y-5">
+          <input
+            type="text"
+            name="name"
+            placeholder="Full Name"
+            value={formData.name}
+            onChange={handleChange}
+            required
+            className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+            className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <input
+            type="text"
+            name="phone"
+            placeholder="Phone Number"
+            value={formData.phone}
+            onChange={handleChange}
+            required
+            className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            value={formData.password}
+            onChange={handleChange}
+            required
+            className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+
+          {/* Role Selection */}
+          <select
+            name="type"
+            value={formData.type}
+            onChange={handleChange}
+            className="w-full p-3 border border-gray-300 rounded-lg shadow-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="admin">Admin</option>
+            <option value="cashier">Cashier</option>
+            <option value="supplier">Supplier</option>
+          </select>
+
+          {/* Register Button */}
+          <button
+            type="submit"
+            className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-lg transition-all duration-300 shadow-md"
+          >
+            Register
+          </button>
+
+          {/* Login Button */}
+          <button
+            type="button"
+            onClick={() => router.push("/login")}
+            className="w-full bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-4 rounded-lg transition-all duration-300 shadow-md"
+          >
+            Login
+          </button>
+        </form>
+      </div>
+    </div>
   );
 }
