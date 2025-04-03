@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { jsPDF } from "jspdf";
+import "jspdf-autotable";
 
 export default function CashierPage() {
   const [products, setProducts] = useState([]);
@@ -60,20 +61,54 @@ export default function CashierPage() {
 
   const handlePrintInvoice = () => {
     const doc = new jsPDF();
-    doc.text(`Invoice - ${invoice.date}`, 10, 10);
-    doc.text(`Customer: ${invoice.customer.name}`, 10, 20);
-    doc.text(`Phone: ${invoice.customer.phone}`, 10, 30);
-    invoice.items.forEach((item, index) => {
-      doc.text(`${item.name} - ₹${item.price} x ${item.quantity}`, 10, 40 + index * 10);
+    console.log(doc.autoTable,"handlePrintInvoice");
+    // Set document title
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(18);
+    doc.text("Invoice", 14, 15);
+  
+    // Draw a horizontal line
+    doc.setLineWidth(0.5);
+    doc.line(10, 20, 200, 20);
+  
+    // Customer details
+    doc.setFontSize(12);
+    doc.setFont("helvetica", "normal");
+    doc.text(`Date: ${invoice.date}`, 14, 30);
+    doc.text(`Customer: ${invoice.customer.name}`, 14, 40);
+    doc.text(`Phone: ${invoice.customer.phone}`, 14, 50);
+  
+    // Define table headers and rows
+    const tableColumn = ["Item", "Price (₹)", "Quantity", "Total (₹)"];
+    const tableRows = invoice.items.map((item) => [
+      item.name,
+      item.price.toFixed(2),
+      item.quantity,
+      (item.price * item.quantity).toFixed(2),
+    ]);
+  
+    // 👇 Correct way to call autoTable
+    doc.autoTable({
+      startY: 60,
+      head: [tableColumn],
+      body: tableRows,
+      theme: "grid",
+      headStyles: { fillColor: [44, 62, 80], textColor: [255, 255, 255] },
+      alternateRowStyles: { fillColor: [240, 240, 240] },
+      styles: { fontSize: 10, cellPadding: 3 },
     });
-    doc.text(`Total: ₹${invoice.total}`, 10, 100);
-    doc.save("invoice_"+invoice.customer.name+"_"+invoice.customer.phone+".pdf");
-    setCart([]);
-    setInvoice(null);
-    setCustomer({ name: "", phone: "" });
-    setQuantity(0);
-    setSelectedProduct(null);
+  
+    // Calculate final Y position after the table
+    const finalY = doc.lastAutoTable.finalY + 10;
+  
+    // Display total amount
+    doc.setFont("helvetica", "bold");
+    doc.text(`Total Amount: ₹${invoice.total.toFixed(2)}`, 14, finalY);
+  
+    // Save the PDF
+    doc.save(`invoice_${invoice.customer.name}_${invoice.customer.phone}.pdf`);
   };
+  
 
   const handleRemoveFromCart = (productId) => {
     setCart(cart.filter((item) => item._id !== productId));
